@@ -1,0 +1,16 @@
+name: juju-local
+summary: Setup a local juju
+maintainer: Peter Sabaini <peter.sabaini@canonical.com>
+description: |
+  Install and bootstrap a juju env using the local provider (lxd)
+
+tags:
+  - misc
+subordinate: true
+series:
+  - bionic
+#  - xenial
+requires:
+  juju-info:
+    interface: juju-info
+    scope: container

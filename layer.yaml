@@ -1,0 +1,19 @@
+# exclude the interfaces and layers folders we use for submodules
+exclude:
+  - interfaces
+  - layers
+# include required layers here
+includes:
+  - layer:basic
+  - layer:snap
+options:
+  snap:
+    core:
+      channel: stable      
+    juju:
+      channel: stable
+      classic: true
+    juju-wait:
+      channel: stable
+      classic: true
+

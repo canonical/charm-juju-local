@@ -1,0 +1,9 @@
+charm_name: juju-local
+tests:
+  - tests.tests_juju_local.CharmJujuLocalTest
+gate_bundles:
+  - bionic
+target_deploy_status:
+  juju-local:
+    workload-status: active
+    workload-status-message: ''
