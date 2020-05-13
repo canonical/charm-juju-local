@@ -42,6 +42,7 @@ class JujuLocalHelper:
             sudo usermod -aG lxd ubuntu
             sudo -u ubuntu bash <<eof
             newgrp lxd
+            lxc profile set default raw.lxc lxc.apparmor.profile=unconfined
             /snap/bin/juju clouds
             /snap/bin/juju bootstrap localhost lxd
             eof"""

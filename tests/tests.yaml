@@ -2,6 +2,7 @@ charm_name: juju-local
 tests:
   - tests.tests_juju_local.CharmJujuLocalTest
 gate_bundles:
+  - focal
   - bionic
 target_deploy_status:
   juju-local:
