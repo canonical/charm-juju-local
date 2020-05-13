@@ -2,7 +2,7 @@ from pathlib import Path
 import subprocess
 import textwrap
 
-from charmhelpers.core import hookenv
+from charmhelpers.core import hookenv, host
 
 
 class JujuLocalHelper:
@@ -37,14 +37,20 @@ class JujuLocalHelper:
         subprocess.call(install_sh, shell=True)
 
     def setup_juju(self):
-        install_sh = textwrap.dedent(
-            """
-            sudo usermod -aG lxd ubuntu
-            sudo -u ubuntu bash <<eof
-            newgrp lxd
-            lxc profile set default raw.lxc lxc.apparmor.profile=unconfined
-            /snap/bin/juju clouds
-            /snap/bin/juju bootstrap localhost lxd
-            eof"""
+        subprocess.call("sudo usermod -aG lxd ubuntu", shell=True)
+        if host.is_container():
+            subprocess.call(
+                "sudo -u ubuntu lxc profile set default "
+                "raw.lxc lxc.apparmor.profile=unconfined",
+                shell=True,
+            )
+        subprocess.call(
+            textwrap.dedent(
+                """
+                sudo -u ubuntu bash <<eof
+                /snap/bin/juju clouds
+                /snap/bin/juju bootstrap localhost lxd
+                eof"""
+            ),
+            shell=True,
         )
-        subprocess.call(install_sh, shell=True)
