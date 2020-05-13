@@ -23,7 +23,7 @@ class CharmJujuLocalTest(unittest.TestCase):
             " ".join(args), fmt
         )
         res = model.run_on_unit(self.jlocal_unit, cmd)
-        return res["Stdout"], res["Stderr"]
+        return res.get("Stdout"), res.get("Stderr")
 
     def juju_status(self):
         stdout, _ = self.remote_juju(["status"])
