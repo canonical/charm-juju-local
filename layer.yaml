@@ -16,4 +16,5 @@ options:
     juju-wait:
       channel: stable
       classic: true
+repo: "https://code.launchpad.net/charm-juju-local"
 
