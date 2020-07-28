@@ -6,17 +6,17 @@ from lib_charm_juju_local import JujuLocalHelper
 helper = JujuLocalHelper()
 
 
-SNAPS_TO_INSTALL = ['juju', 'juju-wait']
+SNAPS_TO_INSTALL = ["juju", "juju-wait"]
 
 
 # Workaround for LP#1712808: manually handle snap installation.
 # Don't remove layer-snap; we'll keep using it for the rest of its infrastructure
 # (e.g. prereqs, snap.install/refresh), but we'll handle installation of the actual
 # snaps themselves.
-@hook('install')
+@hook("install")
 def install():
     try:
-        snap.install('snapd')
+        snap.install("snapd")
     except Exception:
         # The "snapd" install will fail on privileged containers, but subsequent retries
         # (including as a prereq of another snap) will work.  Ignore any failures on
@@ -26,7 +26,7 @@ def install():
         snap.install(snap_name, classic=True)
 
 
-@hook('upgrade-charm')
+@hook("upgrade-charm")
 def upgrade_charm():
     # Install any required snaps which might not already be installed.
     # (Note that layer-snap actually calls its own install logic on every hook via
