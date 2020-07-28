@@ -6,15 +6,5 @@ exclude:
 includes:
   - layer:basic
   - layer:snap
-options:
-  snap:
-    core:
-      channel: stable      
-    juju:
-      channel: stable
-      classic: true
-    juju-wait:
-      channel: stable
-      classic: true
 repo: "https://code.launchpad.net/charm-juju-local"
 
