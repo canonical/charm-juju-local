@@ -28,6 +28,11 @@ def install():
 
 @hook('upgrade-charm')
 def upgrade_charm():
+    # Install any required snaps which might not already be installed.
+    # (Note that layer-snap actually calls its own install logic on every hook via
+    # hookenv.atstart(); calling install() here is fairly conservative.)
+    install()
+    # Refresh the installed snaps
     for snap_name in SNAPS_TO_INSTALL:
         snap.refresh(snap_name, classic=True)
 
