@@ -14,7 +14,7 @@ SNAPS_TO_INSTALL = ['juju', 'juju-wait']
 # (e.g. prereqs, snap.install/refresh), but we'll handle installation of the actual
 # snaps themselves.
 @hook('install')
-def upgrade_charm():
+def install():
     try:
         snap.install('snapd')
     except Exception:
