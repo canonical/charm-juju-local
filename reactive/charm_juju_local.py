@@ -16,9 +16,9 @@ SNAPS_TO_INSTALL = ['juju', 'juju-wait']
 @hook('install')
 def upgrade_charm():
     try:
-        snap.install('core')
+        snap.install('snapd')
     except Exception:
-        # The "core" install will fail on privileged containers, but subsequent retries
+        # The "snapd" install will fail on privileged containers, but subsequent retries
         # (including as a prereq of another snap) will work.  Ignore any failures on
         # this first attempt.
         pass
