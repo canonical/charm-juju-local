@@ -49,6 +49,7 @@ class JujuLocalHelper:
                 """
                 sudo -u ubuntu bash <<eof
                 /snap/bin/juju clouds
+                /snap/bin/lxc network set lxdbr0 ipv6.address none
                 /snap/bin/juju bootstrap localhost lxd
                 eof"""
             ),
