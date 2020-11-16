@@ -1,17 +1,1 @@
-series: focal
-description: "charm-juju-local charm test bundle"
-machines:
-  "0":
-    constraints: "arch=amd64"
-relations:
-  - [ "server:juju-info", "juju-local:juju-info" ]
-applications:
-  server:
-    charm: ubuntu
-    num_units: 1
-    to:
-      - "0"
-  juju-local:
-    num_units: 0
-
-
+base.yaml

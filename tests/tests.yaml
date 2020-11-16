@@ -4,6 +4,11 @@ tests:
 gate_bundles:
   - focal
   - bionic
+  - xenial
+dev_bundles:
+  - focal
+smoke_bundles:
+  - bionic
 target_deploy_status:
   juju-local:
     workload-status: active

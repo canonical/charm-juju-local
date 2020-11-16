@@ -10,6 +10,7 @@ subordinate: true
 series:
   - focal
   - bionic
+  - xenial
 requires:
   juju-info:
     interface: juju-info
