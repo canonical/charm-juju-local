@@ -3,6 +3,7 @@ import subprocess
 import textwrap
 
 from charmhelpers.core import hookenv, host, templating
+from charmhelpers.fetch.ubuntu import apt_cache
 
 
 LXD_BRIDGE_TMPL = "lxd-bridge.ini.j2"
@@ -37,6 +38,15 @@ class JujuLocalHelper:
 
     def is_xenial(self):
         return host.lsb_release()["DISTRIB_CODENAME"] == "xenial"
+
+    def lxd_migrate(self):
+        """Run lxd.migrate if lxd debian package is installed.
+
+        This function is meant to be called after the lxd snap is
+        installed.
+        """
+        if apt_cache().dpkg_list(["lxd"]):
+            subprocess.call("sudo lxd.migrate -yes", shell=True)
 
     def lxd_init(self):
         if self.is_xenial():

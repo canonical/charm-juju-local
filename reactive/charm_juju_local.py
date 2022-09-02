@@ -6,7 +6,7 @@ from lib_charm_juju_local import JujuLocalHelper
 helper = JujuLocalHelper()
 
 
-SNAPS_TO_INSTALL = ["juju", "juju-wait"]
+SNAPS_TO_INSTALL = ["juju", "juju-wait", "lxd"]
 
 
 # Workaround for LP#1712808: manually handle snap installation.
@@ -24,6 +24,7 @@ def install():
         pass
     for snap_name in SNAPS_TO_INSTALL:
         snap.install(snap_name, classic=True)
+    helper.lxd_migrate()
 
 
 @hook("upgrade-charm")
