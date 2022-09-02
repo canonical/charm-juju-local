@@ -1,3 +1,6 @@
+JUJU_REPOSITORY=$(dir $(realpath $(MAKEFILE_LIST)))
+CHARM_NAME=$(shell cat ${JUJU_REPOSITORY}/metadata.yaml | grep -E "^name:" | awk '{print $$2}')
+
 help:
 	@echo "This project supports the following targets"
 	@echo ""
@@ -16,20 +19,21 @@ lint:
 test: lint functional
 
 functional: build
-	@tox -e functional
+	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e functional
 
 build:
 	@echo "Building charm to base directory $(JUJU_REPOSITORY)"
-	@LAYER_PATH=./layers INTERFACE_PATH=./interfaces TERM=linux \
-		JUJU_REPOSITORY=$(JUJU_REPOSITORY) charm build . --force
+	@charmcraft pack --verbose
+	@bash -c ./rename.sh
 
 release: clean build
-	@echo "Charm is built at $(JUJU_REPOSITORY)/builds"
+	@echo "Charm is built at $(JUJU_REPOSITORY)/$(CHARM_NAME).charm"
 
 clean:
 	@echo "Cleaning files"
 	@rm -rf .tox
 	@find . -iname __pycache__ -exec rm -r {} +
+	@$(RM) $(JUJU_REPOSITORY)/$(CHARM_NAME).charm
 
 # The targets below don't depend on a file
 .PHONY: lint test functional build release clean help

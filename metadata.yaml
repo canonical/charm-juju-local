@@ -7,10 +7,7 @@ description: |
 tags:
   - misc
 subordinate: true
-series:
-  - focal
-  - bionic
-  - xenial
+series: []
 requires:
   juju-info:
     interface: juju-info
