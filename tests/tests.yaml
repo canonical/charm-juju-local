@@ -12,4 +12,7 @@ smoke_bundles:
 target_deploy_status:
   juju-local:
     workload-status: active
-    workload-status-message: ''
+    workload-status-message-regex: "^$"
+  server:
+    workload-status: active
+    workload-status-message-regex: "^$"
