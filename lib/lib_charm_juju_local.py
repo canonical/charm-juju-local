@@ -36,9 +36,6 @@ class JujuLocalHelper:
                 ]
             )
 
-    def is_xenial(self):
-        return host.lsb_release()["DISTRIB_CODENAME"] == "xenial"
-
     def lxd_migrate(self):
         """Run lxd.migrate if lxd debian package is installed.
 
@@ -49,40 +46,31 @@ class JujuLocalHelper:
             subprocess.call("sudo lxd.migrate -yes", shell=True)
 
     def lxd_init(self):
-        if self.is_xenial():
-            install_sh = "lxd init --auto --storage-backend dir"
-            subprocess.call(install_sh, shell=True)
-            self.render_lxd_bridge()
-            host.service_restart("lxd-bridge")
-        else:
-            # bionic or newer
-            install_sh = textwrap.dedent(
-                """
-                lxd init --auto --storage-backend dir
-                lxc network delete lxdbr0
-                lxc network create lxdbr0 ipv4.address=auto ipv6.address=none"""
-            )
-            subprocess.call(install_sh, shell=True)
+        install_sh = textwrap.dedent(
+            """
+            lxd init --auto --storage-backend dir
+            lxc network delete lxdbr0
+            lxc network create lxdbr0 ipv4.address=auto ipv6.address=none"""
+        )
+        subprocess.call(install_sh, shell=True)
 
     def setup_juju(self):
         subprocess.call("sudo usermod -aG lxd ubuntu", shell=True)
-        if self.is_xenial():
-            aa_profile = "lxc.aa_profile"
-        else:
-            aa_profile = "lxc.apparmor.profile"
+        aa_profile = "lxc.apparmor.profile"
         if host.is_container():
             subprocess.call(
                 "sudo -u ubuntu lxc profile set default "
                 "raw.lxc {}=unconfined".format(aa_profile),
                 shell=True,
             )
+        series = host.lsb_release()["DISTRIB_CODENAME"]
         subprocess.call(
             textwrap.dedent(
-                """
+                f"""
                 sudo -u ubuntu bash <<eof
                 /snap/bin/juju clouds
                 /snap/bin/lxc network set lxdbr0 ipv6.address none
-                /snap/bin/juju bootstrap localhost lxd
+                /snap/bin/juju bootstrap --bootstrap-series={series} localhost lxd
                 eof"""
             ),
             shell=True,

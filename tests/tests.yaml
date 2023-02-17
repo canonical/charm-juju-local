@@ -5,7 +5,6 @@ gate_bundles:
   - jammy
   - focal
   - bionic
-  - xenial
 dev_bundles:
   - jammy
 smoke_bundles:
