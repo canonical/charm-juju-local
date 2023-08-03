@@ -1,0 +1,8 @@
+options:
+  juju-channel:
+    default: "2.9/stable"
+    type: string
+    description: |
+        The channel of juju snap to install. Default to 2.9/stable.
+        Note: This value needs to be set at deployment time. Changes made
+        post-deployment will not be taken into effect.
