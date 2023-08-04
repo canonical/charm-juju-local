@@ -23,7 +23,11 @@ def install():
         # this first attempt.
         pass
     for snap_name in SNAPS_TO_INSTALL:
-        snap.install(snap_name, classic=True)
+        if snap_name == "juju":
+            juju_channel = hookenv.config("juju-channel")
+            snap.install(snap_name, channel=juju_channel, classic=True)
+        else:
+            snap.install(snap_name, classic=True)
     helper.lxd_migrate()
 
 
