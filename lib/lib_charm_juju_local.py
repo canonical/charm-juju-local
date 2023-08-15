@@ -4,6 +4,7 @@ import textwrap
 
 from charmhelpers.core import hookenv, host, templating
 from charmhelpers.fetch.ubuntu import apt_cache
+from charms.layer import snap
 
 
 LXD_BRIDGE_TMPL = "lxd-bridge.ini.j2"
@@ -46,6 +47,9 @@ class JujuLocalHelper:
             subprocess.call("sudo lxd.migrate -yes", shell=True)
 
     def lxd_init(self):
+        # Refresh lxd snap to "latest/stable" channel for Juju 3.x support.
+        snap.refresh("lxd", channel="latest/stable")
+
         install_sh = textwrap.dedent(
             """
             lxd init --auto --storage-backend dir
@@ -64,6 +68,14 @@ class JujuLocalHelper:
                 shell=True,
             )
         series = host.lsb_release()["DISTRIB_CODENAME"]
+
+        # Create juju's local user directory if missing
+        # This is a workaround for LP #1988355
+        subprocess.call(
+            "sudo -u ubuntu mkdir -p /home/ubuntu/.local/share/juju",
+            shell=True,
+        )
+
         subprocess.call(
             textwrap.dedent(
                 f"""

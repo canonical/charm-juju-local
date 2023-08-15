@@ -6,6 +6,7 @@ help:
 	@echo ""
 	@echo " make help - show this text"
 	@echo " make lint - run flake8"
+	@echo " make unittests - run the tests defined in the unittest subdirectory"
 	@echo " make test - run the functests and lint"
 	@echo " make functional - run the tests defined in the functional subdirectory"
 	@echo " make release - build the charm"
@@ -15,6 +16,9 @@ help:
 lint:
 	@echo "Running flake8"
 	@-tox -e lint
+
+unittests:
+	@echo "No unit tests available at the moment"
 
 test: lint functional
 

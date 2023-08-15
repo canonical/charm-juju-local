@@ -1,1 +1,2 @@
 Markupsafe<2.0.0  # for xenial support
+tenacity<5.0.4 # workaround for LP#2031582

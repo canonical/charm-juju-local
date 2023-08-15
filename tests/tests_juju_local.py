@@ -13,8 +13,13 @@ class CharmJujuLocalTest(unittest.TestCase):
         cls.model_name = model.get_juju_model()
         cls.test_config = lifecycle_utils.get_charm_config()
         model.block_until_all_units_idle()
+        # Add a test model in the remote Juju cloud 
+        # This is needed becuase in Juju 3.x there's no default model created
+        # after bootstrapping the controller
+        cls.remote_juju(["add-model", "test"], None)
 
-    def remote_juju(self, args, format="json"):
+    @classmethod
+    def remote_juju(cls, args, format="json"):
         if format:
             fmt = "--format={}".format(format)
         else:
@@ -22,11 +27,18 @@ class CharmJujuLocalTest(unittest.TestCase):
         cmd = """sudo -u ubuntu bash -c '/snap/bin/juju {} {}'""".format(
             " ".join(args), fmt
         )
-        res = model.run_on_unit(self.jlocal_unit, cmd)
-        return res.get("Stdout"), res.get("Stderr")
+        res = model.run_on_unit(cls.jlocal_unit, cmd)
+        return_code = int(res["Code"])
+        if return_code != 0:
+            raise RuntimeError(
+                "Failed to execute command in juju-local unit.\nStderr: {}".format(
+                    res.get("Stderr")
+                )
+            )
+        return res.get("Stdout")
 
     def juju_status(self):
-        stdout, _ = self.remote_juju(["status"])
+        stdout = self.remote_juju(["status"])
         return json.loads(stdout)
 
     def test_juju_status(self):
@@ -34,7 +46,7 @@ class CharmJujuLocalTest(unittest.TestCase):
         self.assertEqual(jstatus["model"]["controller"], "lxd")
 
     def test_juju_users(self):
-        stdout, _ = self.remote_juju(["users"])
+        stdout = self.remote_juju(["users"])
         userobjects = json.loads(stdout)
         usernames = set(u["user-name"] for u in userobjects)
         self.assertTrue("admin" in usernames)
