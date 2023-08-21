@@ -2,12 +2,16 @@ charm_name: juju-local
 tests:
   - tests.tests_juju_local.CharmJujuLocalTest
 gate_bundles:
+  - jammy-juju3
+  - focal-juju3
   - jammy
   - focal
   - bionic
 dev_bundles:
+  - jammy-juju3
   - jammy
 smoke_bundles:
+  - focal-juju3
   - focal
 target_deploy_status:
   juju-local:
