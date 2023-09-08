@@ -23,7 +23,10 @@ unittests:
 test: lint functional
 
 functional: build
-	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e functional
+	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e func
+
+functional31: build
+	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e func31
 
 build:
 	@echo "Building charm to base directory $(JUJU_REPOSITORY)"
@@ -40,5 +43,5 @@ clean:
 	@$(RM) $(JUJU_REPOSITORY)/$(CHARM_NAME).charm
 
 # The targets below don't depend on a file
-.PHONY: lint test functional build release clean help
+.PHONY: lint test functional functional31 build release clean help
 
