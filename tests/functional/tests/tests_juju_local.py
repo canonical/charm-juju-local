@@ -13,7 +13,7 @@ class CharmJujuLocalTest(unittest.TestCase):
         cls.model_name = model.get_juju_model()
         cls.test_config = lifecycle_utils.get_charm_config()
         model.block_until_all_units_idle()
-        # Add a test model in the remote Juju cloud 
+        # Add a test model in the remote Juju cloud
         # This is needed becuase in Juju 3.x there's no default model created
         # after bootstrapping the controller
         cls.remote_juju(["add-model", "test"], None)
