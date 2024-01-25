@@ -6,7 +6,6 @@ gate_bundles:
   - focal-juju3
   - jammy
   - focal
-  - bionic
 dev_bundles:
   - jammy-juju3
   - jammy
