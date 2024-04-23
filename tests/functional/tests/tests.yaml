@@ -4,14 +4,10 @@ tests:
 gate_bundles:
   - jammy-juju3
   - focal-juju3
-  - jammy
-  - focal
 dev_bundles:
   - jammy-juju3
-  - jammy
 smoke_bundles:
   - focal-juju3
-  - focal
 target_deploy_status:
   juju-local:
     workload-status: active
