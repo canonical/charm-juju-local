@@ -2,8 +2,6 @@ description: "charm-juju-local charm test bundle"
 machines:
   "0":
     constraints: "arch=amd64" "virt-type=virtual-machine"
-relations:
-  - [ "server:juju-info", "juju-local:juju-info" ]
 applications:
   server:
     charm: ubuntu
@@ -15,5 +13,7 @@ applications:
     charm: juju-local
     num_units: 0
     constraints: "virt-type=virtual-machine"
+relations:
+  - [ "server:juju-info", "juju-local:juju-info" ]
 
 
