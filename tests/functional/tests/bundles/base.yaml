@@ -8,10 +8,12 @@ applications:
   server:
     charm: ubuntu
     num_units: 1
+    constraints: "virt-type=virtual-machine"
     to:
       - "0"
   juju-local:
     charm: juju-local
     num_units: 0
+    constraints: "virt-type=virtual-machine"
 
 
