@@ -33,7 +33,7 @@ jobs:
         command: ["TEST_JUJU3=1 make functional"]  # TEST_JUJU3 needed due https://github.com/openstack-charmers/zaza/blob/b22c2eed4c322f1dfc14ffb2d31e0dd18c911a40/setup.py#L47 to support Juju3+
         juju-channel: ["3.4/stable"]
     with:
-      command: ${{ matrix.command }}
+      command: TEST_JUJU_CHANNEL=${{ matrix.juju-channel }} ${{ matrix.command }}
       juju-channel: ${{ matrix.juju-channel }}
       nested-containers: false
       provider: "lxd"
