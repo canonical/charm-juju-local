@@ -23,10 +23,7 @@ unittests:
 test: lint functional
 
 functional: build
-	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e func
-
-functional31: build
-	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e func31
+	@JUJU_REPOSITORY=$(JUJU_REPOSITORY) tox -e func -- ${FUNC_ARGS}
 
 build:
 	@echo "Building charm to base directory $(JUJU_REPOSITORY)"
