@@ -68,10 +68,11 @@ jobs:
         run: ${{ matrix.test-command }}
         env:
           TEST_JUJU3: "1"  # https://github.com/openstack-charmers/zaza/pull/653
+          TEST_JUJU_CHANNEL: ${{ matrix.juju-channel }}
 
       # Post-tests save output for debugging
 
-      - name: Generate crashdumps on all models
+      - name: Generate juju crashdumps
         if: always()
         run: |
           set -x
@@ -85,7 +86,8 @@ jobs:
             juju-crashdump --as-root -m "$model" -u "$model-$(uname -m)"
           done
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload juju crashdumps
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: juju-crashdump
