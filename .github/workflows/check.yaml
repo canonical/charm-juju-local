@@ -81,6 +81,9 @@ jobs:
 
           models="$(juju models --format json | jq -r '.models[]."short-name"')"
           dir="$(mktemp -d)"
+          # Use a different dir to avoid charmed-kubernetes/actions-operator from also trying to upload crashdumps.
+          # We don't want to rely on that action, because it doesn't use a descriptive enough name for the artefact,
+          # and we may stop using that action soon.
           echo "CRASHDUMPS_DIR=$dir" | tee -a "$GITHUB_ENV"
           echo "CRASHDUMPS_ARTEFACT_SUFFIX=$(uuid)-$(uname -m)" | tee -a "$GITHUB_ENV"
 
