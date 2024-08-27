@@ -52,11 +52,6 @@ jobs:
           juju-channel: "3.4/stable"
           charmcraft-channel: "2.x/stable"
 
-      - name: Show juju information
-        run: |
-          juju version
-          juju controllers | grep Version -A 1 | awk '{print $9}'
-
         # This is used by zaza in the functional tests for non-amd64 architectures (if applicable)
       - name: Set zaza juju model constraints for architecture
         run: |
@@ -64,20 +59,27 @@ jobs:
             echo "TEST_MODEL_CONSTRAINTS=arch=arm64" >> "$GITHUB_ENV"
           fi
 
-      # - name: Run tests
-      #   run: ${{ matrix.test-command }}
-      #   env:
-      #     TEST_JUJU3: "1"  # https://github.com/openstack-charmers/zaza/pull/653
-      #     TEST_JUJU_CHANNEL: ${{ matrix.juju-channel }}
+      - name: Run tests
+        run: ${{ matrix.test-command }}
+        env:
+          TEST_JUJU3: "1"  # https://github.com/openstack-charmers/zaza/pull/653
+          TEST_JUJU_CHANNEL: ${{ matrix.juju-channel }}
 
-      # Post-tests save output for debugging
+      # Save output for debugging
 
-      - name: Generate juju crashdumps
+      - name: Generate debugging information
         if: always()
         run: |
           set -x
+          # install dependencies
           sudo snap install --classic juju-crashdump
           sudo apt install -y jq uuid
+
+          # Print juju controller information for debugging
+          # to check controller and client are compatible versions;
+          # we can have a mismatch if using an external controller.
+          juju version
+          juju controllers
 
           models="$(juju models --format json | jq -r '.models[]."short-name"')"
           dir="$(mktemp -d)"
@@ -88,7 +90,8 @@ jobs:
           echo "CRASHDUMPS_ARTEFACT_SUFFIX=$(uuid)-$(uname -m)" | tee -a "$GITHUB_ENV"
 
           for model in $models; do
-            juju status -m "$model"  # show status here for quick debugging
+            # show status here for quick debugging
+            juju status -m "$model"
             juju-crashdump --as-root -m "$model" -u "$model-$(uname -m)" -o "$dir"
           done
 
