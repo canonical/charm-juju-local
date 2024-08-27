@@ -77,23 +77,21 @@ jobs:
         run: |
           set -x
           sudo snap install --classic juju-crashdump
-          sudo apt install -y jq
+          sudo apt install -y jq uuid
 
           models="$(juju models --format json | jq -r '.models[]."short-name"')"
+          dir="$(mktemp -d)"
+          echo "CRASHDUMPS_DIR=$dir" | tee -a "$GITHUB_ENV"
+          echo "CRASHDUMPS_ARTEFACT_SUFFIX=$(uuid)-$(uname -m)" | tee -a "$GITHUB_ENV"
 
           for model in $models; do
             juju status -m "$model"  # show status here for quick debugging
-            juju-crashdump --as-root -m "$model" -u "$model-$(uname -m)"
+            juju-crashdump --as-root -m "$model" -u "$model-$(uname -m)" -o "$dir"
           done
-
-      - name: Generate unique id for artefacts
-        run: |
-          sudo apt install -y uuid
-          echo "ARTEFACT_SUFFIX=$(uuid)-$(uname -m)" | tee -a "$GITHUB_ENV"
 
       - name: Upload juju crashdumps
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: "juju-crashdumps-${{ env.ARTEFACT_SUFFIX }}"
-          path: juju-crashdump-*.tar.xz
+          name: "juju-crashdumps-${{ env.CRASHDUMPS_ARTEFACT_SUFFIX }}"
+          path: "${{ env.CRASHDUMPS_DIR }}/juju-crashdump-*.tar.xz"
