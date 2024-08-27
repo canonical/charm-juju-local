@@ -87,7 +87,9 @@ jobs:
           done
 
       - name: Generate unique id for artefacts
-        run: echo "ARTEFACT_SUFFIX='$(uuid)-$(uname -m)'" | tee -a "$GITHUB_ENV"
+        run: |
+          sudo apt install -y uuid
+          echo "ARTEFACT_SUFFIX=$(uuid)-$(uname -m)" | tee -a "$GITHUB_ENV"
 
       - name: Upload juju crashdumps
         uses: actions/upload-artifact@v4
