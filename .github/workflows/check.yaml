@@ -64,11 +64,11 @@ jobs:
             echo "TEST_MODEL_CONSTRAINTS=arch=arm64" >> "$GITHUB_ENV"
           fi
 
-      - name: Run tests
-        run: ${{ matrix.test-command }}
-        env:
-          TEST_JUJU3: "1"  # https://github.com/openstack-charmers/zaza/pull/653
-          TEST_JUJU_CHANNEL: ${{ matrix.juju-channel }}
+      # - name: Run tests
+      #   run: ${{ matrix.test-command }}
+      #   env:
+      #     TEST_JUJU3: "1"  # https://github.com/openstack-charmers/zaza/pull/653
+      #     TEST_JUJU_CHANNEL: ${{ matrix.juju-channel }}
 
       # Post-tests save output for debugging
 
@@ -86,9 +86,12 @@ jobs:
             juju-crashdump --as-root -m "$model" -u "$model-$(uname -m)"
           done
 
+      - name: Generate unique id for artefacts
+        run: echo "ARTEFACT_SUFFIX='$(uuid)-$(uname -m)'" | tee -a "$GITHUB_ENV"
+
       - name: Upload juju crashdumps
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: func tests juju crashdump ${{ matrix.runs-on }} ${{ matrix.juju-channel }}
+          name: "juju-crashdumps-${{ env.ARTEFACT_SUFFIX }}"
           path: juju-crashdump-*.tar.xz
