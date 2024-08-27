@@ -90,5 +90,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: juju-crashdump
+          name: func tests juju crashdump ${{ matrix.runs-on }} ${{ matrix.juju-channel }}
           path: juju-crashdump-*.tar.xz
