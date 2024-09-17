@@ -1,5 +1,6 @@
 series: focal
 applications:
   {{ charm_name }}:
+    charm: "{{ FOCAL_CHARM_PATH }}"
     options:
       juju-channel: {{ TEST_JUJU_CHANNEL }}
