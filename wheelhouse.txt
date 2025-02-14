@@ -1,4 +1,5 @@
-Markupsafe<2.0.0  # for xenial support
-tenacity<5.0.4 # workaround for LP#2031582
+tenacity
 setuptools>=42
+# NOTE: The typing-extensions could not be installed without this requirement to be specified.
 flit-core>=3
+setuptools_scm[toml]>=3.4
