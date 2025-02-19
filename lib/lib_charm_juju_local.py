@@ -1,3 +1,5 @@
+"""Juju Local."""
+
 from pathlib import Path
 import subprocess
 import textwrap
@@ -12,10 +14,12 @@ LXD_BRIDGE_CFG = "/etc/default/lxd-bridge"
 
 
 class JujuLocalError(Exception):
-    """An error in the JujuLocal charm"""
+    """An error in the JujuLocal charm."""
 
 
 class JujuLocalHelper:
+    """Juju Local Helper."""
+
     def __init__(self):
         self.charm_config = hookenv.config()
 
@@ -108,7 +112,7 @@ class JujuLocalHelper:
 
     @staticmethod
     def get_lxd_network_prefix():
-        """Find a free network prefix
+        """Find a free network prefix.
 
         Find a /24 network prefix, that doesn't conflict with another directly
         connected net, by retrieving existing 10/8 nets, finding the largest

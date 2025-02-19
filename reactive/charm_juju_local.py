@@ -1,7 +1,9 @@
-from charmhelpers.core import hookenv
-from charms.layer import snap
-from charms.reactive import hook, set_flag, when_not
-from lib_charm_juju_local import JujuLocalHelper
+"""Juju Local reactive module."""
+
+from charmhelpers.core import hookenv  # pylint: disable=import-error
+from charms.layer import snap  # pylint: disable=import-error
+from charms.reactive import hook, set_flag, when_not  # pylint: disable=import-error
+from lib_charm_juju_local import JujuLocalHelper  # pylint: disable=import-error
 
 helper = JujuLocalHelper()
 
@@ -14,10 +16,11 @@ SNAPS_TO_INSTALL = ["juju", "juju-wait", "lxd"]
 # (e.g. prereqs, snap.install/refresh), but we'll handle installation of the actual
 # snaps themselves.
 @hook("install")
-def install():
+def install() -> None:
+    """Install reactive method."""
     try:
         snap.install("snapd")
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         # The "snapd" install will fail on privileged containers, but subsequent retries
         # (including as a prereq of another snap) will work.  Ignore any failures on
         # this first attempt.
@@ -32,7 +35,8 @@ def install():
 
 
 @hook("upgrade-charm")
-def upgrade_charm():
+def upgrade_charm() -> None:
+    """Charm upgrade reactive method."""
     # Install any required snaps which might not already be installed.
     # (Note that layer-snap actually calls its own install logic on every hook via
     # hookenv.atstart(); calling install() here is fairly conservative.)
@@ -43,7 +47,8 @@ def upgrade_charm():
 
 
 @when_not("juju-local.installed")
-def install_charm_juju_local():
+def install_charm_juju_local() -> None:
+    """Install charm juju local if not installed yet."""
     helper.gen_keys()
     helper.lxd_init()
     helper.setup_juju()
