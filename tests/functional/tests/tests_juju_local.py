@@ -2,8 +2,8 @@
 import json
 import unittest
 
-from zaza import model
 import zaza.charm_lifecycle.utils as lifecycle_utils
+from zaza import model
 
 
 class CharmJujuLocalTest(unittest.TestCase):
@@ -24,9 +24,7 @@ class CharmJujuLocalTest(unittest.TestCase):
             fmt = "--format={}".format(format)
         else:
             fmt = ""
-        cmd = """sudo -u ubuntu bash -c '/snap/bin/juju {} {}'""".format(
-            " ".join(args), fmt
-        )
+        cmd = """sudo -u ubuntu bash -c '/snap/bin/juju {} {}'""".format(" ".join(args), fmt)
         res = model.run_on_unit(cls.jlocal_unit, cmd)
         return_code = int(res["Code"])
         if return_code != 0:
@@ -53,9 +51,7 @@ class CharmJujuLocalTest(unittest.TestCase):
 
     def test_deploy(self):
         self.remote_juju(["deploy", "ubuntu"], format=None)
-        model.run_on_unit(
-            self.jlocal_unit, "sudo -u ubuntu bash -c 'juju-wait -t 1200'"
-        )
+        model.run_on_unit(self.jlocal_unit, "sudo -u ubuntu bash -c 'juju-wait -t 1200'")
         jstatus = self.juju_status()
         _, unit = jstatus["applications"]["ubuntu"]["units"].popitem()
         self.assertEqual(unit["workload-status"]["current"], "active")
