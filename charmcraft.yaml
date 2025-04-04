@@ -1,20 +1,9 @@
 type: charm
 parts:
   charm:
-    source: .
+    source: src
     plugin: reactive
-    build-snaps: [charm/2.x/stable]
-bases:
-    - build-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures: ["amd64"]
-      run-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures:
-              - amd64
-        - name: ubuntu
-          channel: "20.04"
-          architectures:
-              - amd64
+    build-snaps: [charm]
+platforms:
+  ubuntu@20.04:amd64:
+  ubuntu@22.04:amd64:
