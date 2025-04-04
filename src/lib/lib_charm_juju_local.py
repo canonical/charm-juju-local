@@ -1,13 +1,12 @@
 """Juju Local."""
 
-from pathlib import Path
 import subprocess
 import textwrap
+from pathlib import Path
 
 from charmhelpers.core import hookenv, host, templating
 from charmhelpers.fetch.ubuntu import apt_cache
 from charms.layer import snap
-
 
 LXD_BRIDGE_TMPL = "lxd-bridge.ini.j2"
 LXD_BRIDGE_CFG = "/etc/default/lxd-bridge"
